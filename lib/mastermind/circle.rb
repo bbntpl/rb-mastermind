@@ -26,6 +26,8 @@ class Circle
     "#{@color_code}#{circles[size.to_sym]}\e[0m"
   end
 
+  private
+
   def validate_size!(size)
     raise ArgumentError, 'Circle must be small or large' unless VALID_SIZES.include?(size)
   end
