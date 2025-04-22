@@ -20,3 +20,12 @@
 #     a. Yes? Go to Step 2
 #     b. Yes, but change the settings. Go to Step 1
 #     c. No, end the program, yay!
+
+require_relative 'lib/mastermind/circle'
+
+white = Circle.new('255', '255', '255', 'white')
+pink = Circle.new('255', '0', '0', 'red')
+
+circles = [white, pink]
+
+circles.each { |circle| puts circle }
