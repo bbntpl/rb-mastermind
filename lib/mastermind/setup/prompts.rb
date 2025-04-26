@@ -29,7 +29,7 @@ module PromptsSetup
     name_requirement: 'Name must have 2-12 characters'
   }.freeze
 
-  def prompt_config(game_exists: False)
+  def prompt_config(game_exists: false)
     unless game_exists
       mode = prompt_mode
       return default if mode == 'd'
@@ -44,6 +44,8 @@ module PromptsSetup
     config = GameConfig.new(mode, code_len, max_int)
     game_exists ? config : [config, *players]
   end
+
+  private
 
   def prompt_mode
     puts GameSetup.prompt_for(:mode)

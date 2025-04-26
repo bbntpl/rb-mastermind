@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'lib/mastermind/setup/setup'
+require_relative 'lib/mastermind/setup/game_setup'
 
-GameSetup.start
+setup = GameSetup.new
+setup.start
 
 # Pseudocode for Mastermind program
 #
