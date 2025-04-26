@@ -2,7 +2,7 @@
 
 # Game
 class Game
-  attr_reader :in_session
+  attr_reader :in_session, :config
 
   def initialize(config, player1, player2)
     @config = config
@@ -12,6 +12,10 @@ class Game
     @code = code
     @p1 = player1 # player1 shouldbe the codemaker
     @p2 = player2 # player2 should be the codebreaker
+  end
+
+  def new_config(config)
+    @config = config
   end
 
   def valid_guess(guess)

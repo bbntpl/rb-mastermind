@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require_relative 'lib/mastermind/setup/setup'
+
+GameSetup.start
+
 # Pseudocode for Mastermind program
 #
 # 1. Configure the game settings such as # of colors, # of holes, and modes (PvP, PvCOM, or COMvCOM)
@@ -20,20 +24,3 @@
 #     a. Yes? Go to Step 2
 #     b. Yes, but change the settings. Go to Step 1
 #     c. No, end the program, yay!
-
-require_relative 'lib/mastermind/setup/setup'
-
-def main
-  # List of available game modes
-  modes = GameSetup::MODES
-
-  # Prompt user to enter game mode
-  puts GameSetup.prompt_for(:mode)
-
-  usr_input = gets.chomp
-
-  GameSetup.default
-  nil unless usr_input == 'd'
-end
-
-GameSetup.start

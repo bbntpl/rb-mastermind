@@ -6,7 +6,7 @@ class Code
   include Validation
   attr_reader :str, :len, :to_arr
 
-  def initialize(str, len, game_int)
+  def initialize(str, len, max_int)
     validate_length!(len)
     validate_string!(str)
 
@@ -16,6 +16,7 @@ class Code
     @to_arr = str.chars(str)
   end
 
-  def generate_code(game)
+  def generate_code
+    'TODO'
   end
 end
