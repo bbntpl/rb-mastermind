@@ -21,4 +21,19 @@
 #     b. Yes, but change the settings. Go to Step 1
 #     c. No, end the program, yay!
 
-require_relative 'lib/mastermind/circle'
+require_relative 'lib/mastermind/setup/setup'
+
+def main
+  # List of available game modes
+  modes = GameSetup::MODES
+
+  # Prompt user to enter game mode
+  puts GameSetup.prompt_for(:mode)
+
+  usr_input = gets.chomp
+
+  GameSetup.default
+  nil unless usr_input == 'd'
+end
+
+GameSetup.start

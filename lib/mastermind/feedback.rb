@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'circle'
-
 # Feedback consists of user feedback circles that helps the user to figure out
 # the code through trial and error
 class Feedback
