@@ -1,24 +1,26 @@
 # frozen_string_literal: true
 
+require_relative 'prompts'
+require_relative '../game'
+
 # GameSetup is a class that contains methods for setting up the Mastermind
 # program
 class GameSetup
-  include PlayerSetup
-
-  MODES = {
-    1 => 'pvp',
-    2 => 'pvc',
-    3 => 'cvc'
-  }.freeze
+  include PromptsSetup
+  include PromptsSetup::Restart
 
   def start
     game = init_config
-    loop do
-      reconfig(game)
+    end_game_decision = 'r'
 
-      puts 'The game is ready :)'
-      puts game.config
-      'TODO: Ask user again to play after the game'
+    loop do
+      reconfig(game) if end_game_decision == 'c'
+
+      puts 'The game has started :)'
+      game.start
+
+      end_game_decision = prompt_restart
+      break if end_game_decision == 'q'
     end
   end
 
@@ -33,11 +35,8 @@ class GameSetup
   end
 
   def init_config
-    config, p1, p2 = prompt_config
-    players[0] = p1
-    players[1] = p2
-
-    Game.new(config)
+    config = prompt_config(false)
+    Game.new(*config)
   end
 
   def reconfig(game)

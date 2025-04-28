@@ -5,20 +5,20 @@ require_relative '../player/computer'
 
 # Module for setting up players based on the selected game mode
 module PlayerSetup
-  def create_players(mode, codemaker, *pnames)
+  def create_players(mode, codemaker_name, *pnames)
     case mode
-    when 'pvc'
-      create_player_and_com(codemaker, *pnames)
-    when 'cvc'
+    when :pvc
+      create_player_and_com(codemaker_name, *pnames)
+    when :cvc
       create_two_computers
-    else
+    when :pvp
       create_two_players(codemaker_name, *pnames)
     end
   end
 
   private
 
-  def create_player_and_com(codemaker_name, pname)
+  def create_player_and_com(codemaker_name, pname, _pname2)
     p = Player.new(pname)
     c = Computer.new('COM')
 
@@ -27,11 +27,11 @@ module PlayerSetup
   end
 
   def create_two_players(codemaker_name, pname, pname2)
-    p = Player.new(pname)
+    p1 = Player.new(pname)
     p2 = Player.new(pname2)
 
     # Codemaker goes first and codebreaker is positioned last
-    p.name == codemaker_name ? [p, p2] : [p2, p]
+    p1.name == codemaker_name ? [p1, p2] : [p2, p1]
   end
 
   def create_two_computers

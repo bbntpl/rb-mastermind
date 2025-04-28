@@ -3,20 +3,20 @@
 # Code is a Mastermind class to store patterns of code
 # either the hidden code or the codebreaker guess
 class Code
-  include Validation
-  attr_reader :str, :len, :to_arr
+  attr_reader :code
 
-  def initialize(str, len, max_int)
-    validate_length!(len)
-    validate_string!(str)
-
-    @str = str
-    @len = len
-    @max_int = max_int
-    @to_arr = str.chars(str)
+  def initialize(code, len, max_digit)
+    validate_code!(code, len, max_digit)
+    @code = code
   end
 
-  def generate_code
-    'TODO'
+  private
+
+  def validate_code!(input, code_len, max_digit)
+    if code_len > input.length ||
+       !Integer(input) ||
+       input.chars.any? { |c| c.to_i > max_digit || c.to_i < 1 }
+      raise ArgumentError
+    end
   end
 end
