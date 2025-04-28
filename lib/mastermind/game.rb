@@ -6,7 +6,8 @@ require_relative 'feedback'
 
 # Game
 class Game
-  attr_reader :in_session, :config, :codebreaker, :codemaker, :guesses, :feedbacks
+  attr_accessor :guesses, :feedbacks
+  attr_reader :in_session, :config, :codebreaker, :codemaker
 
   def initialize(config, player1, player2)
     @config = config
@@ -24,23 +25,36 @@ class Game
 
   def start
     @in_session = true
-
     @hidden_code = create_code(generate_code)
     while @in_session
-      guess_code = generate_guess
-      add_guess(guess_code)
-      add_feedback(@hidden_code.code, guess_code)
-
+      round
       print_panel
-      end_game if codemaker_win? || codebreaker_win?
-      increment_winner_score
+
+      if codemaker_win? || codebreaker_win?
+        increment_winner_score
+        end_game
+      end
+    end
+  end
+
+  def validate_code!(input)
+    if config.code_len > input.length ||
+       !Integer(input) ||
+       input.chars.any? { |c| c.to_i > config.max_digit || c.to_i < 1 }
+      raise ArgumentError
     end
   end
 
   private
 
+  def round
+    guess_code = generate_guess
+    add_guess(guess_code)
+    add_feedback(@hidden_code.code, guess_code)
+  end
+
   def create_code(guess)
-    Code.new(guess, config.code_len, config.max_digit)
+    Code.new(guess)
   end
 
   def add_guess(guess)
@@ -48,7 +62,7 @@ class Game
   end
 
   def add_feedback(hidden_code, guess)
-    feedbacks.append(Feedback.new(hidden_code, guess))
+    feedbacks.append(Feedback.new(hidden_code.chars, guess.chars))
   end
 
   def print_panel
@@ -73,18 +87,18 @@ class Game
   def increment_winner_score
     if codebreaker_win?
       @codebreaker.score += 1
-      puts "#{codebreaker.name} has won the game!"
+      puts "\n#{codebreaker.name} has won the game!"
     elsif codemaker_win?
       @codemaker.score += 1
-      puts "#{codemaker.name} has won the game!"
+      puts "\n#{codemaker.name} has won the game! The secret code was #{@hidden_code.code}"
     end
   end
 
   def generate_guess
-    if @codemaker.instance_of?(Player)
-      @codemaker.turn(config, 'guess')
-    elsif @codemaker.instance_of?(Computer)
-      @codemaker.generate_code(config.code_len, config.max_digit)
+    if @codebreaker.instance_of?(Player)
+      @codebreaker.turn(self, 'guess')
+    elsif @codebreaker.instance_of?(Computer)
+      @codebreaker.generate_code(config.code_len, config.max_digit)
     end
   end
 
@@ -92,11 +106,24 @@ class Game
     if @codemaker.instance_of?(Computer)
       @codemaker.generate_code(config.code_len, config.max_digit)
     elsif @codemaker.instance_of?(Player)
-      @codemaker.turn(config, 'enter_code')
+      @codemaker.turn(self, 'enter_code')
     end
   end
 
+  def show_score
+    p1 = codemaker
+    p2 = codebreaker
+    puts "#{p1.name}: #{p1.score} - #{p2.score}:#{p2.name}\n"
+  end
+
+  def reset_game
+    @guesses = []
+    @feedbacks = []
+  end
+
   def end_game
+    show_score
+    reset_game
     @in_session = false
   end
 end

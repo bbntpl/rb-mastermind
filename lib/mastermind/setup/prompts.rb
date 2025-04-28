@@ -49,7 +49,7 @@ module PromptsSetup
   def prompt_config(game_exists)
     unless game_exists
       gamemode = mode
-      return gamemode if gamemode == 'd'
+      return default if gamemode == 'd'
 
       players = players(gamemode)
     end
@@ -65,7 +65,7 @@ module PromptsSetup
   # Get mode as valid user input when prompted
   def mode
     mode_key = prompt_mode
-    mode_key == 'd' ? default : MODES[mode_key.to_i]
+    mode_key == 'd' ? 'd' : MODES[mode_key.to_i]
   end
 
   # Get players as class instances when input is obtained when prompted

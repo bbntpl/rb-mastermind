@@ -27,9 +27,9 @@ class GameSetup
   private
 
   def default
-    config = GameConfig.new('pvp', 4, 6)
-    p1 = Player.new('Player1')
-    p2 = Player.new('Player2')
+    config = GameConfig.new('pvc', 4, 6)
+    p1 = Computer.new('COM')
+    p2 = Player.new('Player1')
 
     [config, p1, p2]
   end
