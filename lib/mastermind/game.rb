@@ -25,7 +25,7 @@ class Game
 
   def start
     @in_session = true
-    @hidden_code = create_code(generate_code)
+    @hidden_code = generate_code
     while @in_session
       round
       print_panel
@@ -37,32 +37,24 @@ class Game
     end
   end
 
-  def validate_code!(input)
-    if config.code_len > input.length ||
-       !Integer(input) ||
-       input.chars.any? { |c| c.to_i > config.max_digit || c.to_i < 1 }
-      raise ArgumentError
-    end
-  end
-
   private
 
   def round
     guess_code = generate_guess
     add_guess(guess_code)
-    add_feedback(@hidden_code.code, guess_code)
-  end
-
-  def create_code(guess)
-    Code.new(guess)
+    add_feedback(@hidden_code.code, guess_code.code)
   end
 
   def add_guess(guess)
-    guesses.append(create_code(guess))
+    guesses.append(guess)
+  end
+
+  def create_feedback(hidden_code, guess)
+    Feedback.new(hidden_code.chars, guess.chars)
   end
 
   def add_feedback(hidden_code, guess)
-    feedbacks.append(Feedback.new(hidden_code.chars, guess.chars))
+    feedbacks.append(create_feedback(hidden_code, guess))
   end
 
   def print_panel
@@ -96,17 +88,17 @@ class Game
 
   def generate_guess
     if @codebreaker.instance_of?(Player)
-      @codebreaker.turn(self, 'guess')
+      @codebreaker.turn(config, 'guess')
     elsif @codebreaker.instance_of?(Computer)
-      @codebreaker.generate_code(config.code_len, config.max_digit)
+      @codebreaker.generate_code(config)
     end
   end
 
   def generate_code
     if @codemaker.instance_of?(Computer)
-      @codemaker.generate_code(config.code_len, config.max_digit)
+      @codemaker.generate_code(config)
     elsif @codemaker.instance_of?(Player)
-      @codemaker.turn(self, 'enter_code')
+      @codemaker.turn(config, 'enter_code')
     end
   end
 

@@ -13,16 +13,15 @@ class Player
     @score = 0
   end
 
-  def turn(game, type = 'enter_code')
+  def turn(config, type = 'enter_code')
     loop do
-      code_len = game.config.code_len
-      max_digit = game.config.max_digit
+      code_len = config.code_len
+      max_digit = config.max_digit
 
       puts "\nCode length: #{code_len}, Max int: #{max_digit}"
 
       code = type == 'enter_code' ? enter_code : guess
-      game.validate_code!(code)
-      return code
+      return Code.new(code, config)
     rescue ArgumentError
       puts "\n#{name}! It's an invalid code!"
     end

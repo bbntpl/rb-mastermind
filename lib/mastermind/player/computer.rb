@@ -8,12 +8,12 @@ class Computer < Player
     super(name)
   end
 
-  def generate_code(code_len, max_digit)
+  def generate_code(config)
     code = ''
-    code_len.times do
-      code += rand(1..max_digit).to_s
+    config.code_len.times do
+      code += rand(1..config.max_digit).to_s
     end
 
-    code
+    Code.new(code, config)
   end
 end
